@@ -1,0 +1,37 @@
+extend ../layout/common.pug
+block content
+	h1 Users
+
+	.d-flex.align-items-center
+		a.btn.btn-primary.mb-2(href="/users/create") New user
+		br
+		form.ml-auto(action="/users/search", method="get", autocomplete="off")
+			label.mr-2(display="block" for="search-bar") Search by name
+			input#search-bar(type="text", name="name", placeholder="enter name here")
+			button.btn.btn-dark.ml-2(type="submit") Search
+
+	table.table
+		tr
+			th Name
+			th Phone
+			th Actions
+		each user in users
+			tr
+				td(style="text-transform: capitalize")= user.name
+				td= user.phone
+				td
+					a.btn.btn-info.mb-2(target="_self" href="/users/" + user.id) View
+		else
+			li= "There is no user"
+
+
+	script.
+		document.getElementsByTagName("input")[0].value = sessionStorage.getItem("lastSearch") || "";
+		document.getElementsByTagName("button")[0].addEventListener("click", storageSet);
+
+		function storageSet(event) {
+			console.log(event);
+			let input = document.getElementsByTagName("input")[0];
+			sessionStorage.setItem("lastSearch", input.value);
+		}
+	

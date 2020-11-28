@@ -1,0 +1,18 @@
+extend ../layout/common.pug
+block content
+	h2 Create User
+	
+	form(action="/users/create-new-user", method="post")
+		.container.d-block.pl-0
+			label.mr-2(for="name") Name
+			input#name.mr-2(type="text", name="name", placeholder="Enter user name here", autocomplete="off", value=values.name ? values.name : "")
+			if errors.name
+				.alert.alert-danger= errors.name
+
+		.containter.d-block.pl-0
+			label.mr-2(for="phone") Phone
+			input#phone.mr-2(type="text", name="phone", placeholder="Enter user name here", autocomplete="off", value=values.phone ? values.phone : "")
+			if errors.phone
+				.alert.alert-danger= errors.phone
+
+		button.btn.btn-success(type="submit") Create
