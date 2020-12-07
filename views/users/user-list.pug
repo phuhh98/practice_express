@@ -7,31 +7,29 @@ block content
 		br
 		form.ml-auto(action="/users/search", method="get", autocomplete="off")
 			label.mr-2(display="block" for="search-bar") Search by name
-			input#search-bar(type="text", name="name", placeholder="enter name here")
+			input#search-bar(type="text", name="name", placeholder="enter name here", value= lastSearch || "")
 			button.btn.btn-dark.ml-2(type="submit") Search
 
 	table.table
 		tr
+			th Avatar
 			th Name
 			th Phone
 			th Actions
 		each user in users
 			tr
+				td
+					if (user.avatar)
+						img(src="/" + user.avatar, witdth="60", height="60")
+					else
+						img(src="/public/images/default-avatar.jpg", witdth="60", height="60")
 				td(style="text-transform: capitalize")= user.name
 				td= user.phone
 				td
-					a.btn.btn-info.mb-2(target="_self" href="/users/" + user.id) View
+					span
+						a.btn.btn-info.mb-2(target="_self" href="/users/view/" + user._id) View
+						a.btn.btn-danger.ml-2.mb-2(target="_self" href="/users/delete/"+ user._id) Delete
 		else
-			li= "There is no user"
-
-
-	script.
-		document.getElementsByTagName("input")[0].value = sessionStorage.getItem("lastSearch") || "";
-		document.getElementsByTagName("button")[0].addEventListener("click", storageSet);
-
-		function storageSet(event) {
-			console.log(event);
-			let input = document.getElementsByTagName("input")[0];
-			sessionStorage.setItem("lastSearch", input.value);
-		}
-	
+			tr
+				td
+					li= "There is no matched user"

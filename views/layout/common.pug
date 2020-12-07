@@ -4,7 +4,7 @@ html
 	body
 		nav.navbar.navbar-expand-lg.navbar-light.bg-light
 			a.navbar-brand(href='/' title="coding")
-				img(src="./images/logo.png" width="170" height="30")
+				img(src="/public/images/logo.png" width="170" height="35")
 			button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
 				span.navbar-toggler-icon
 
@@ -14,8 +14,14 @@ html
 						a.nav-link(href='/') Home
 							span.sr-only
 					li.nav-item
-						a.nav-link(href='/users/list') Users
-
-		nav.nav
-		.container.pt-5
+						a.nav-link(href='/users/') Users
+					li.nav-item
+						a.nav-link(href='/products/') Products
+					li.nav-item
+						a.nav-link(href='#') Cart(
+							span=cartCount
+							span )
+			if (user)
+				p(style="text-transform: capitalize")= user.name
+		.container.pt-5(style="max-width: 80%")
 			block content

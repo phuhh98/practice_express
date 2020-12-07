@@ -2,17 +2,33 @@ extend ../layout/common.pug
 block content
 	h2 Create User
 	
-	form(action="/users/create-new-user", method="post")
-		.container.d-block.pl-0
+	form(method="post", enctype="multipart/form-data")
+		.container.d-block.pl-0.mb-3.ml-0
 			label.mr-2(for="name") Name
-			input#name.mr-2(type="text", name="name", placeholder="Enter user name here", autocomplete="off", value=values.name ? values.name : "")
+			input#name.mr-2(type="text", name="name", placeholder="Full name", autocomplete="off", value=values.name ? values.name : "")
 			if errors.name
 				.alert.alert-danger= errors.name
 
-		.containter.d-block.pl-0
+		.containter.d-block.pl-0.mb-3
 			label.mr-2(for="phone") Phone
-			input#phone.mr-2(type="text", name="phone", placeholder="Enter user name here", autocomplete="off", value=values.phone ? values.phone : "")
+			input#phone.mr-2(type="text", name="phone", placeholder="Phone number", autocomplete="off", value=values.phone ? values.phone : "")
 			if errors.phone
 				.alert.alert-danger= errors.phone
+
+		.containter.d-block.pl-0.mb-3
+			label.mr-2(for="email") Email/User name
+			input#email.mr-2(type="text", name="email", placeholder="User name", autocomplete="off", value=values.email ? values.email : "")
+			if errors.email
+				.alert.alert-danger= errors.email
+
+		.containter.d-block.pl-0.mb-3
+			label.mr-2(for="phone") Password
+			input#password.mr-2(type="password", name="password", autocomplete="off")
+			if errors.password
+				.alert.alert-danger= errors.password
+
+		.containter.d-block.pl-0.mb-3
+			label.mr-2(for="avatar") Avatar
+			input#avatar.mr-2(type="file", name="avatar")
 
 		button.btn.btn-success(type="submit") Create

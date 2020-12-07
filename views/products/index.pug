@@ -1,0 +1,24 @@
+extend ../layout/common.pug
+
+block content
+	h3 Products
+		span
+			a(href="#").btn.btn-primary.ml-2 + 
+	nav.Page.navigation
+		ul.pagination.justify-content-center
+			li.page-item
+				a.page-link(href="?page="+(currentPage -1)) Previous
+			each page in pageOptions
+				li.page-item
+					a.page-link(href="?page="+ page)= page
+			li.page-item
+				a.page-link(href="?page="+(currentPage +1 )) Next
+	.row.row-cols-1.row-cols-md-4
+		each item in products
+			.col.mb-3
+				.card.h-70
+					img.card-img-top(src=item.image, alt="...")
+					.card-body
+						h4.card-title= item.name
+						p.card-text= item.description
+						a.btn.btn-primary(href="/cart/"+item._id) Add to cart

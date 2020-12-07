@@ -6,7 +6,7 @@ const adapter = new FileSync('db.json');	// create a file-synce adapter
 const db = low(adapter);	//create a database instance
 
 // set default state for db.json
-db.defaults({users: []})	//inside .defaults(...) is an object literal or variable
+db.defaults({users: [], products: [], sessions: []})	//inside .defaults(...) is an object literal or variable
   .write();	//write to db.json (make change to file)
 
 module.exports = db;

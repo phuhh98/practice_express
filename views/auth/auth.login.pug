@@ -1,0 +1,21 @@
+extend ../layout/common.pug
+block content
+	.d-flex.row.justify-content-center
+		.container(style="max-width: max-content")
+			h2.mb-4.mb-3 Login
+			
+			form(action="/auth/login" method="post")
+
+				.container.d-block.pl-0.ml-0
+					label.mr-2.mb-3(for="name") Email
+					input#email.mr-2(type="text", name="email", placeholder="Enter email", autocomplete="on", value=value.email ? value.email: "")
+					if errors.email
+						.alert.alert-danger= errors.email
+
+				.containter.d-block.pl-0.ml-0
+					label.mr-2.mb-3(for="phone") Password
+					input#password.mr-2(type="password", name="password", placeholder="Enter password", autocomplete="on", value=value.email ? value.password: "")
+					if errors.password
+						.alert.alert-danger= errors.password
+				button.btn.btn-success.mr-2(type="submit") Login
+			a.btn.btn-primary.mr-2(href="/users/create") New user

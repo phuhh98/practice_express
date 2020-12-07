@@ -1,27 +1,31 @@
 "use strict";
 const express = require("express");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/"})
 
 const controller = require("../controllers/user.controller.js");
+const validate = require("../validate/user.validate.js");
 
 const router = express.Router();
 
-router.use(express.static('public'))	//make public folder available
-
 //user-list
-router.get("/list", controller.list);
+router.get("/", controller.list);
 
 //search users
 router.get("/search", controller.search);
 
 
 //user create
-router.get("/create", controller.create);
+router.get("/create/", controller.create);
 
 //push new user
-router.post("/create-new-user", controller.postNewUser);
+router.post("/create/", upload.single('avatar'), validate.postNewUser, controller.postNewUser);
 
 //user's detail - view
-router.get("/:id", controller.userDetail);
+router.get("/view/:id", controller.userDetail);
+
+//delete use
+router.get("/delete/:id", controller.deleteUser);
 
 
 module.exports = router;
