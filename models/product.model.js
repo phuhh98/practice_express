@@ -4,6 +4,7 @@ const productSchema = new mongoose.Schema({
 	// _id: mongoose.ObjectId, // chi nen khai bao khi kiem soat id dau vao
 	description: String,
 	image: String,
+	name: String,
 })
 
 const Product = mongoose.model('Product', productSchema);

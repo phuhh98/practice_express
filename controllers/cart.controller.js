@@ -13,7 +13,6 @@ module.exports.addItemToCart = async function(req, res, next) {
 	let sessionId = req.signedCookies.sessionId;
 
 	
-	// let session = db.get("sessions").find( {id: sessionId} );
 	let session = await Session.findById(sessionId);
 	let cart = session.cart || {};
 	let itemCount = cart[productId];
@@ -22,6 +21,11 @@ module.exports.addItemToCart = async function(req, res, next) {
 	} else {
 		cart[productId] = ++itemCount;
 	}
-	await Session.update({_id: sessionId}, {cart: cart})
+	try {
+		await Session.update({_id: sessionId}, {cart: cart})
+	} catch(err) {
+		console.err(err);
+	}
+	
 	res.redirect(originUrl);
 }

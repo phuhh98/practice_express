@@ -1,8 +1,15 @@
 const Product = require("../models/product.model.js");
 
-module.exports.itemsPage = async function(req, res, next) {
+module.exports.productPagination = async function(req, res, next) {
+	
+	console.log(res.locals.products);
+	if (!res.locals.products) {
+		next();
+		return;
+	}
+
 	let items = 8;
-	let productList = await Product.find();
+	let productList = res.locals.products || await Product.find();
 	let maxPage = Math.ceil(productList.length/items);	//tinh so page toi da co the bieu dien tu database
 	let page = parseInt(req.query.page) || 1; // chu y phai parseInt page query sang so tu nhien moi cong tru duoc ngon lanh
 	
@@ -24,12 +31,41 @@ module.exports.itemsPage = async function(req, res, next) {
 
 	pageOptions = pageOptions.filter(function (curr) {
 		return curr <= maxPage;
-	})
+	});
 
 	let products = productList.slice(start,end);		//slice mot so luong phan tu trong db de bieu dien
-	res.render("products/index.pug", {
-		products: products,
-		pageOptions: pageOptions,
-		currentPage: page,
-	})
+
+	res.locals.products = products;
+	res.locals.pageOptions = pageOptions;
+	res.locals.currentPage = page;
+	next();
+}
+
+module.exports.pageRender = function(req, res, next) {
+	res.render("products/index.pug")
+}
+
+module.exports.itemSearch = async function(req, res, next) {
+	let name = req.query.name;
+	
+	try {
+		var productList = await Product.find();
+	} catch(err) {
+		console.err(err);
+	}
+
+	let matchedProducts = productList.filter((product) => {
+		return product.name.toLowerCase().includes(name.toLowerCase());
+	});
+
+	res.locals.lastSearch = name;
+
+	if (matchedProducts.length === 0) {
+		res.locals.products = null;
+		next();
+		return;
+	}
+
+	res.locals.products = matchedProducts;
+	next();
 }
