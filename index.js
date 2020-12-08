@@ -7,7 +7,7 @@ const mongoose = require('mongoose'); //access to mongodb via mongoose
 mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true});
 mongoose.set('debug', true);
 
-const port = 5000;
+const port = process.env.PORT;
 const app = express(); //create express app instance
 
 const userRouter = require("./routes/user.route.js");
