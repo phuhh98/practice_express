@@ -1,7 +1,7 @@
 "use strict";
 const express = require("express");
 const multer = require("multer");
-const upload = multer({ dest: "uploads/"})
+const upload = multer({ dest: process.env.UPLOAD_URL});
 
 const controller = require("../controllers/user.controller.js");
 const validate = require("../validate/user.validate.js");
