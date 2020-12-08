@@ -1,13 +1,27 @@
-"use strict";
+
 require("dotenv").config(); // require dotenv module to call in .env file to set process.env variables
 const express = require("express");	//call express package
 const bodyParser = require('body-parser');	//call body-parser package to translate client request (readability)
 const cookieParser = require('cookie-parser'); // call cookie-parser package to read cookie
 const mongoose = require('mongoose'); //access to mongodb via mongoose
-mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true});
-mongoose.set('debug', true);
 
-const port = process.env.PORT;
+const db = process.env.MONGO_URL || "mongodb://localhost/express-test";
+const connectDB = async () => {
+  try {
+    await mongoose.connect(db,  {
+      // useUnifiedTopology: true,
+      // useNewUrlParser: true
+    });
+    console.log("MongoDB is Connected...");
+  } catch (err) {
+    console.error(err.message);
+    process.exit(1);
+  }
+};
+connectDB();
+// mongoose.set('debug', true);
+
+const port = process.env.PORT || 5000;
 const app = express(); //create express app instance
 
 const userRouter = require("./routes/user.route.js");
@@ -15,6 +29,7 @@ const productRouter = require("./routes/product.route.js");
 const authRouter = require("./routes/auth.route.js");
 const cartRouter = require("./routes/cart.route.js");
 const apiProductRouter = require("./api/routes/product.route.js");	//call product api router in ./api/routes
+const testRouter = require("./routes/test.route.js");
 
 const authMiddleware = require("./middlewares/auth.middleware.js");
 const sessionMiddleware = require("./middlewares/session.middleware.js");
@@ -32,6 +47,7 @@ app.use("/users", authMiddleware.requireAuth, userRouter); //use router for /use
 app.use("/products", authMiddleware.requireAuth, productRouter);
 app.use("/cart", cartRouter);
 app.use("/api/products", apiProductRouter);
+app.use("/test", testRouter); /// test for buffer image render
 
 app.use("/public", express.static('public'));	//make public folder available
 app.use("/uploads", express.static('uploads'));	//make public folder available

@@ -3,8 +3,8 @@ extend ../layout/common.pug
 block content
 
 	h3 Products
-		span
-			a(href="#").btn.btn-primary.ml-2 + 
+		//- span
+		//- 	a(href="#").btn.btn-primary.ml-2 + 
 	form.ml-auto(action="/products/", method="get", autocomplete="off")
 		label.mr-2(display="block" for="search-bar") Search item
 		input#search-bar(type="text", name="name", placeholder="Item to search", value= lastSearch || "")

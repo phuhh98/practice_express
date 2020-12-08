@@ -1,11 +1,12 @@
 "use strict";
-const ObjectId = require("mongoose").ObjectId; 
 const User = require("../models/user.model.js");
+const Image = require("../models/image.model.js");
 const md5 = require("md5");
 
 module.exports.list = async function (req, res) {
 	let userList = await User.find();
 	res.locals.lastSearch = req.query.name;
+	// console.log(process.argv, process.env);
 	res.render("users/user-list.pug", {
 		users: userList, 
 	});
@@ -46,9 +47,9 @@ module.exports.create = function (req, res) {
 
 module.exports.postNewUser = async function(req, res) {
 	let user = req.body;
+	console.log(req.file);
 	user.password = md5(req.body.password);
 	user.avatar = "";
-
 
 	if (req.file) {
 		user.avatar = req.file.path;		
