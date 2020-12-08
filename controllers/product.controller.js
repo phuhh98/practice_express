@@ -2,26 +2,39 @@ const Product = require("../models/product.model.js");
 
 module.exports.productPagination = async function(req, res, next) {
 	
-	console.log(res.locals.products);
-	if (!res.locals.products) {
+	// console.log(req);s
+	if (res.locals.products === null) { // search yield no result
 		next();
 		return;
 	}
 
-	let items = 8;
-	let productList = res.locals.products || await Product.find();
-	let maxPage = Math.ceil(productList.length/items);	//tinh so page toi da co the bieu dien tu database
-	let page = parseInt(req.query.page) || 1; // chu y phai parseInt page query sang so tu nhien moi cong tru duoc ngon lanh
-	
-	if (page<1) {
-		res.redirect("?page=1");	// dieu huong ve page 1 neu so page nho hon 1
+	let page = parseInt(req.query.page) || 1; //current search page
+	let itemsPerPage = 9;		//max items per page
+	try {		
+		if (res.locals.search) {		//neu da qua search
+			let searchUrl = req.originalUrl;	// url toi
+			let searchPattern = /\&page=\d/g;
+			let url = searchUrl.replace(searchPattern, "") || searchUrl;	// url sau khi cat di "&page=..."
+
+			res.locals.url = url;
+		} else {
+			res.locals.search = false;	// neu khong qua search thi bo qua cat url
+		}	
+	} catch(err) {
+		console.error(err);
 	}
-	if (page > maxPage) {
-		res.redirect(`?page=${maxPage}`);	// dieu huong ve maxPage neu so page lon hon maxPage
+	
+
+	let productList = res.locals.products || await Product.find();
+	let maxPage = Math.ceil(productList.length/itemsPerPage);	//tinh so page toi da co the bieu dien tu database
+	
+	if (page<1 || page > maxPage) {
+		res.redirect(req.headers.referer || req.baseUrl);	// redirect ve trang ban dau neu destination page < 1 || > maxPage
+		return;
 	}
 
-	let start = (page-1)*items;
-	let end = page*items;
+	let start = (page-1)*itemsPerPage;
+	let end = page*itemsPerPage;
 
 	let maxPageOption = Math.ceil(page/3)*3;
 	let pageOptions = [];
@@ -37,7 +50,7 @@ module.exports.productPagination = async function(req, res, next) {
 
 	res.locals.products = products;
 	res.locals.pageOptions = pageOptions;
-	res.locals.currentPage = page;
+	res.locals.currentPage = parseInt(page);
 	next();
 }
 
@@ -46,8 +59,8 @@ module.exports.pageRender = function(req, res, next) {
 }
 
 module.exports.itemSearch = async function(req, res, next) {
-	let name = req.query.name;
-	
+	let name = req.query.name || "";
+	let search = true;
 	try {
 		var productList = await Product.find();
 	} catch(err) {
@@ -67,5 +80,9 @@ module.exports.itemSearch = async function(req, res, next) {
 	}
 
 	res.locals.products = matchedProducts;
+	if ( name == "") {
+		search = false; 
+	}
+	res.locals.search = search;
 	next();
 }

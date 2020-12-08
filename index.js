@@ -14,6 +14,7 @@ const userRouter = require("./routes/user.route.js");
 const productRouter = require("./routes/product.route.js");
 const authRouter = require("./routes/auth.route.js");
 const cartRouter = require("./routes/cart.route.js");
+const apiProductRouter = require("./api/routes/product.route.js");	//call product api router in ./api/routes
 
 const authMiddleware = require("./middlewares/auth.middleware.js");
 const sessionMiddleware = require("./middlewares/session.middleware.js");
@@ -30,6 +31,7 @@ app.use("/auth", authRouter); // authenticator
 app.use("/users", authMiddleware.requireAuth, userRouter); //use router for /users/
 app.use("/products", authMiddleware.requireAuth, productRouter);
 app.use("/cart", cartRouter);
+app.use("/api/products", apiProductRouter);
 
 app.use("/public", express.static('public'));	//make public folder available
 app.use("/uploads", express.static('uploads'));	//make public folder available

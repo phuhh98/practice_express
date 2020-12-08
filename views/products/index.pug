@@ -5,7 +5,7 @@ block content
 	h3 Products
 		span
 			a(href="#").btn.btn-primary.ml-2 + 
-	form.ml-auto(action="/products/search", method="get", autocomplete="off")
+	form.ml-auto(action="/products/", method="get", autocomplete="off")
 		label.mr-2(display="block" for="search-bar") Search item
 		input#search-bar(type="text", name="name", placeholder="Item to search", value= lastSearch || "")
 		button.btn.btn-dark.ml-2(type="submit") Search
@@ -14,13 +14,22 @@ block content
 		nav.Page.navigation
 			ul.pagination.justify-content-center
 				li.page-item
-					a.page-link(href="?page="+(currentPage -1)) Previous
+					if search
+						a.page-link(href=url+"&page="+(currentPage -1)) Previous
+					else
+						a.page-link(href="?page="+(currentPage -1)) Previous
 				each page in pageOptions
 					li.page-item
-						a.page-link(href="?page="+ page)= page
+						if search
+							a.page-link(href=url+"&page=" + page)= page
+						else
+							a.page-link(href="?page="+ page)= page
 				li.page-item
-					a.page-link(href="?page="+(currentPage +1 )) Next
-		.row.row-cols-1.row-cols-md-4
+					if search
+						a.page-link(href=url+"&page="+(currentPage +1 )) Next
+					else					
+						a.page-link(href="?page="+(currentPage +1 )) Next
+		.row.row-cols-1.row-cols-md-2.row-cols-xl-3
 			each item in products
 				.col.mb-3
 					.card.h-70
