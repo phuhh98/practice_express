@@ -23,7 +23,7 @@ module.exports.checkSessionId = async function(req, res, next) {
 				}
 			}
 		} else {
-			res.clearCoookie();
+			res.clearCookie();
 			res.redirect(req.originalUrl);
 		}
 

@@ -19,8 +19,11 @@ block content
 		each user in users
 			tr
 				td
-					if (user.avatar)
-						img(src="/" + user.avatar, witdth="60", height="60")
+					if user.avatar
+						if user.avatar.base64
+							img(src="data:"+user.avatar.mimetype+";base64,"+user.avatar.base64, witdth="60", height="60")
+						else
+							img(src="/public/images/default-avatar.jpg", witdth="60", height="60")
 					else
 						img(src="/public/images/default-avatar.jpg", witdth="60", height="60")
 				td(style="text-transform: capitalize")= user.name

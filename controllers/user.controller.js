@@ -6,10 +6,8 @@ const md5 = require("md5");
 module.exports.list = async function (req, res) {
 	let userList = await User.find();
 	res.locals.lastSearch = req.query.name;
-	// console.log(process.argv, process.env);
-	res.render("users/user-list.pug", {
-		users: userList, 
-	});
+	res.locals.users = userList;
+	res.render("users/user-list.pug");
 }
 
 module.exports.search = async function(req, res) {
@@ -38,7 +36,6 @@ module.exports.search = async function(req, res) {
 }
 
 module.exports.create = function (req, res) {
-	console.log(req);
 	res.render("users/create-new-user.pug", {
 		errors: {},
 		values: {}
@@ -49,10 +46,13 @@ module.exports.postNewUser = async function(req, res) {
 	let user = req.body;
 	console.log(req.file);
 	user.password = md5(req.body.password);
-	user.avatar = "";
 
 	if (req.file) {
-		user.avatar = req.file.path;		
+		user.avatar = {
+			mimetype: req.file.mimetype,
+			size: req.file.size,
+			base64: req.file.buffer.toString("base64")
+		};	
 	}
 
 	try {

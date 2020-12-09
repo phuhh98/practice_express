@@ -6,7 +6,11 @@ const userSchema = new mongoose.Schema({
 	phone: String,
 	email: String,
 	password: String,
-	avatar: String, 
+	avatar: {
+		mimetype: String,
+		base64: String,
+		size: Number
+	}
 })
 
 const User = mongoose.model('User', userSchema);

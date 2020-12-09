@@ -5,7 +5,10 @@ const bodyParser = require('body-parser');	//call body-parser package to transla
 const cookieParser = require('cookie-parser'); // call cookie-parser package to read cookie
 const mongoose = require('mongoose'); //access to mongodb via mongoose
 
-const db = process.env.MONGO_URL || "mongodb://localhost/express-test";
+if (process.env.ENVIRONMENT == "dev") {
+  process.env.MONGODB_URL = "mongodb://localhost/express-test";
+}
+const db = process.env.MONGODB_URL;
 const connectDB = async () => {
   try {
     await mongoose.connect(db,  {
@@ -29,7 +32,6 @@ const productRouter = require("./routes/product.route.js");
 const authRouter = require("./routes/auth.route.js");
 const cartRouter = require("./routes/cart.route.js");
 const apiProductRouter = require("./api/routes/product.route.js");	//call product api router in ./api/routes
-const testRouter = require("./routes/test.route.js");
 
 const authMiddleware = require("./middlewares/auth.middleware.js");
 const sessionMiddleware = require("./middlewares/session.middleware.js");
@@ -47,7 +49,6 @@ app.use("/users", authMiddleware.requireAuth, userRouter); //use router for /use
 app.use("/products", authMiddleware.requireAuth, productRouter);
 app.use("/cart", cartRouter);
 app.use("/api/products", apiProductRouter);
-app.use("/test", testRouter); /// test for buffer image render
 
 app.use("/public", express.static('public'));	//make public folder available
 app.use("/uploads", express.static('uploads'));	//make public folder available
@@ -71,4 +72,4 @@ process.on("SIGTERM", function () {
 	server.close(() => {
 		console.log("Process terminate");
 	})
-})
+});
