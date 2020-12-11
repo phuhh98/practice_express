@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev":"nodemon --inspect",
+    "dev": "nodemon --inspect",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,6 +19,7 @@
     "md5": "^2.3.0",
     "mongoose": "^5.11.4",
     "multer": "^1.4.2",
+    "package.json": "^2.0.1",
     "pug": "^3.0.0",
     "shortid": "^2.2.16"
   },
